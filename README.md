@@ -1,4 +1,4 @@
-# FaazNFT Marketplace
+# Faaz NFT Marketplace
 
 ![Faaz NFT Marketplace](assets/images/faaz-nft-marketplace.png)
 
