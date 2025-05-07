@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FaazNFT Marketplace</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body>
+    <button id="mintButton">Mint NFT</button>
+
+    <script>
+        // Connect to Metamask and Web3
+        if (window.ethereum) {
+            const web3 = new Web3(window.ethereum);
+            window.ethereum.request({ method: 'eth_requestAccounts' });
+
+            const contractAddress = "YOUR_CONTRACT_ADDRESS";
+            const contractABI = [
+                // Add your contract's ABI here
+            ];
+            const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+            document.getElementById('mintButton').addEventListener('click', async () => {
+                const accounts = await web3.eth.getAccounts();
+                const creator = accounts[0];
+                const amount = 1; // Example amount
+                const newUri = "ipfs://YOUR_METADATA_URI";
+                const royaltyReceiver = creator;
+                const royaltyFeeInBips = 500; // 5% royalty
+
+                // Call mintNFT function from the contract
+                await contract.methods.mintNFT(amount, newUri, royaltyReceiver, royaltyFeeInBips)
+                    .send({ from: creator })
+                    .on('transactionHash', (hash) => {
+                        console.log('Transaction Hash:', hash);
+                    })
+                    .on('receipt', (receipt) => {
+                        console.log('Receipt:', receipt);
+                    });
+            });
+        } else {
+            alert("Please install MetaMask!");
+        }
+    </script>
+</body>
+</html>

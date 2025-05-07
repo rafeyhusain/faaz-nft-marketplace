@@ -18,6 +18,48 @@ contract FaazNFTMarketplace is ERC1155, ERC2981, Ownable, ReentrancyGuard {
 
     mapping(uint256 => string) private _tokenURIs;
     mapping(uint256 => Auction) public auctions;
+    mapping(address => bool) public creators; // To store creators
+
+    event CreatorAdded(address indexed creator);
+    event CreatorRemoved(address indexed creator);
+
+    event Minted(address indexed creator, uint256 tokenId, string uri, uint256 amount);
+    event AuctionStarted(address indexed creator, uint256 tokenId, uint256 duration);
+    event BidPlaced(address indexed bidder, uint256 tokenId, uint256 bidAmount);
+
+    // Modifier to restrict minting only to creators
+    modifier onlyCreator() {
+        require(creators[msg.sender], "Caller is not a creator");
+        _;
+    }
+
+    // Admin can add creators
+    function addCreator(address creator) public onlyOwner {
+        creators[creator] = true;
+        emit CreatorAdded(creator);
+    }
+
+    // Admin can remove creators
+    function removeCreator(address creator) public onlyOwner {
+        creators[creator] = false;
+        emit CreatorRemoved(creator);
+    }
+
+    function batchMintNFTs(
+        uint256[] memory amounts, 
+        string[] memory newUris, 
+        address royaltyReceiver, 
+        uint256 royaltyFeeInBips
+    ) 
+        public 
+        onlyCreator
+    {
+        require(amounts.length == newUris.length, "Amounts and URIs count mismatch");
+        
+        for (uint256 i = 0; i < amounts.length; i++) {
+            mintNFT(amounts[i], newUris[i], royaltyReceiver, royaltyFeeInBips); // Reuse the mintNFT logic
+        }
+    }
 
     constructor() ERC1155("") {}
 
@@ -33,6 +75,8 @@ contract FaazNFTMarketplace is ERC1155, ERC2981, Ownable, ReentrancyGuard {
         _tokenURIs[tokenId] = newuri;
         _setTokenRoyalty(tokenId, royaltyReceiver, royaltyFeeInBips);
         currentTokenId++;
+
+        emit Minted(msg.sender, tokenId, newUri, amount); // Log minting event
     }
 
     function uri(uint256 tokenId) public view override returns (string memory) {
@@ -47,6 +91,8 @@ contract FaazNFTMarketplace is ERC1155, ERC2981, Ownable, ReentrancyGuard {
             endTime: block.timestamp + durationInSeconds,
             active: true
         });
+
+        emit AuctionStarted(msg.sender, tokenId, durationInSeconds); // Log auction start event
     }
 
     // Bid on token
@@ -62,6 +108,8 @@ contract FaazNFTMarketplace is ERC1155, ERC2981, Ownable, ReentrancyGuard {
 
         auction.highestBidder = msg.sender;
         auction.highestBid = msg.value;
+
+        emit BidPlaced(msg.sender, tokenId, msg.value); // Log bid event
     }
 
     // End auction and transfer token
