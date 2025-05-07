@@ -1,8 +1,11 @@
 # FaazNFT Marketplace
 
-A decentralized NFT marketplace built using **Solidity**, **ERC-1155**, and **ERC-2981** for minting, bidding/auction, royalties, and ownership management. This project allows creators to mint and auction their digital assets such as art, music, and videos with integrated royalties.
+![Faaz NFT Marketplace](assets/images/faaz-nft-marketplace.png)
+
+A decentralized NFT marketplace built using **Solidity**, **ERC-1155**, and **ERC-2981*- for minting, bidding/auction, royalties, and ownership management. This project allows creators to mint and auction their digital assets such as art, music, and videos with integrated royalties.
 
 ## Features
+
 - Mint NFT tokens with royalties
 - Start and manage auctions
 - Bidding functionality for Art | Music | Video NFTs
@@ -83,36 +86,36 @@ This will execute the test cases in `test/FaazNFT.test.js` and check if your con
 
 ### 1. **mint(amount, newuri, royaltyReceiver, royaltyFeeInBips)**
 
-* Mints a new NFT token.
-* **Parameters**:
+- Mints a new NFT token.
+- **Parameters**:
 
-  * `amount`: Number of tokens to mint.
-  * `newuri`: URI pointing to the metadata (IPFS link).
-  * `royaltyReceiver`: Address to receive royalties.
-  * `royaltyFeeInBips`: Royalty percentage (in basis points, e.g., 500 = 5%).
+  - `amount`: Number of tokens to mint.
+  - `newuri`: URI pointing to the metadata (IPFS link).
+  - `royaltyReceiver`: Address to receive royalties.
+  - `royaltyFeeInBips`: Royalty percentage (in basis points, e.g., 500 = 5%).
 
 ### 2. **startAuction(tokenId, durationInSeconds)**
 
-* Starts an auction for a given NFT token.
-* **Parameters**:
+- Starts an auction for a given NFT token.
+- **Parameters**:
 
-  * `tokenId`: ID of the token to auction.
-  * `durationInSeconds`: Duration of the auction in seconds.
+  - `tokenId`: ID of the token to auction.
+  - `durationInSeconds`: Duration of the auction in seconds.
 
 ### 3. **bid(tokenId)**
 
-* Place a bid on a token during an active auction.
-* **Parameters**:
+- Place a bid on a token during an active auction.
+- **Parameters**:
 
-  * `tokenId`: ID of the token being bid on.
+  - `tokenId`: ID of the token being bid on.
 
 ### 4. **finalizeAuction(tokenId)**
 
-* Finalizes the auction and transfers the token to the highest bidder.
+- Finalizes the auction and transfers the token to the highest bidder.
 
 ### 5. **withdraw()**
 
-* Allows the contract owner to withdraw the contract's balance.
+- Allows the contract owner to withdraw the contract's balance.
 
 ---
 
@@ -120,8 +123,8 @@ This will execute the test cases in `test/FaazNFT.test.js` and check if your con
 
 The following tests are included in the project:
 
-* **Minting**: Verifies that minting works correctly with royalties and URI.
-* **Auction**: Tests auction creation, bidding, and finalizing the auction with token transfer.
-* **Refund**: Ensures the previous bidder is refunded when outbid.
+- **Minting**: Verifies that minting works correctly with royalties and URI.
+- **Auction**: Tests auction creation, bidding, and finalizing the auction with token transfer.
+- **Refund**: Ensures the previous bidder is refunded when outbid.
 
 Test edge cases like double bidding, insufficient balance, and more are handled.
